@@ -68,7 +68,7 @@ public class HelloWorldClient {
       postRequest.content(new StringContentProvider("{\"hello\": \"world\"}"), "application/json");
 
       if (request == null) {
-        //          logger.info("Request is null");
+        logger.info("Request is null");
         break;
       }
 

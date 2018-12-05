@@ -26,6 +26,7 @@ import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -33,6 +34,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 
 public class HelloWorldServer extends AbstractHandler {
+  private static final Logger logger = Logger.getLogger(HelloWorldServer.class.getName());
+
   public static class HelloServlet extends HttpServlet {
     private static String HEAVY_RESOURCE =
         "<h1>Hello .......................... ............................ SimpleServlet</h1>";
@@ -63,7 +66,7 @@ public class HelloWorldServer extends AbstractHandler {
       try {
         Thread.sleep(100);
       } catch (Exception e) {
-        //          logger.info("Error sleeping");
+        logger.info("Error sleeping");
       }
       ServletOutputStream out = response.getOutputStream();
       out.setWriteListener(
@@ -77,14 +80,12 @@ public class HelloWorldServer extends AbstractHandler {
                   return;
                 }
                 out.write(content.get());
-//                out.write("async".getBytes());
-
               }
             }
 
             @Override
             public void onError(Throwable t) {
-              //            logger.info("Server onError callled");
+              logger.info("Server onError callled");
               getServletContext().log("Async Error", t);
               async.complete();
             }
@@ -137,7 +138,7 @@ public class HelloWorldServer extends AbstractHandler {
       StackdriverStatsExporter.createAndRegister();
       StackdriverTraceExporter.createAndRegister(StackdriverTraceConfiguration.builder().build());
     } catch (Exception e) {
-      //        logger.info("Failed to register Stackdriver exporter " + e.toString());
+      logger.info("Failed to register Stackdriver exporter " + e.toString());
     }
     // Register Prometheus exporters and export metrics to a Prometheus HTTPServer.
     PrometheusStatsCollector.createAndRegister();
