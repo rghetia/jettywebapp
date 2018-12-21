@@ -63,6 +63,8 @@ public class HelloWorldClient {
     do {
       HttpRequest request =
           (HttpRequest) httpClient.newRequest("http://localhost:8080/").method(HttpMethod.GET);
+      HttpRequest asyncRequest =
+          (HttpRequest) httpClient.newRequest("http://localhost:8080/async").method(HttpMethod.GET);
       HttpRequest postRequest =
           (HttpRequest) httpClient.newRequest("http://localhost:8080/").method(HttpMethod.POST);
       postRequest.content(new StringContentProvider("{\"hello\": \"world\"}"), "application/json");
@@ -73,9 +75,10 @@ public class HelloWorldClient {
       }
 
       request.send();
+      asyncRequest.send();
       postRequest.send();
       try {
-        Thread.sleep(5000);
+        Thread.sleep(15000);
       } catch (Exception e) {
 
       }
